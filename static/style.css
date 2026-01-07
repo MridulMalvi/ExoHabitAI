@@ -57,6 +57,9 @@ input:focus { border-color: #4b8eff; outline: none; }
 .button-container {
     display: flex;
     gap: 20px; /* Space between buttons */
+    margin-left: 25px;
+    margin-right: 25px;
+
 }
 
 button {
@@ -93,10 +96,12 @@ button {
 .hidden { display: none; }
 
 .result-box {
+    text-align: center;
     margin-top: 25px;
     padding: 20px;
     border-radius: 10px;
     animation: fadeIn 0.5s ease;
+    font-size: 25px;
 }
 
 .result-box.good { background: rgba(75, 255, 100, 0.1); border: 1px solid #4bff64; }

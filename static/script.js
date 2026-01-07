@@ -1,30 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
     const dashboardGrid = document.getElementById('dashboardGrid');
-    const earthDefaults = {
-        P_RADIUS: 1,
-        P_MASS: 1,
-        P_GRAVITY: 1,
-        P_PERIOD: 365.25,
-        P_TEMP_EQUIL: 288,
-        S_MASS: 1,
-        S_RADIUS: 1,
-        S_TEMPERATURE: 5778,
-        S_LUMINOSITY: 1
-    };
-
-    function applyDefaultsToForm(values) {
-        Object.entries(values).forEach(([key, val]) => {
-            const el = document.getElementById(key);
-            if (el) el.value = val;
-        });
-    }
-
-    function renderEarthBaseline() {
-        applyDefaultsToForm(earthDefaults);
-        // Keep result hidden to avoid implying a server prediction; show charts with baseline probability.
-        document.getElementById('result').classList.add('hidden');
-        updateDashboard(earthDefaults, 100);
-    }
 
     // -- PREDICT LOGIC --
     document.getElementById('predictForm').addEventListener('submit', async function(e) {
@@ -35,6 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const title = document.getElementById('resultTitle');
         const probText = document.getElementById('resultProb');
         const meter = document.getElementById('probMeter');
+        const meterContainer = document.querySelector('.meter-container');
 
         btn.textContent = "Calculating Orbit...";
         btn.disabled = true;
@@ -63,9 +39,12 @@ document.addEventListener('DOMContentLoaded', () => {
             resultDiv.classList.remove('hidden');
             title.textContent = result.label;
 
+            // We no longer display the probability percentage—only the habitability label.
             const percentage = Math.max(0, Math.min(100, Number(result.probability) || 0));
-            probText.innerHTML = `Habitability Probability: <strong>${percentage}%</strong>`;
-            meter.style.width = `${percentage}%`;
+            probText.textContent = "";
+            probText.classList.add('hidden');
+            if (meterContainer) meterContainer.classList.add('hidden');
+            meter.style.width = "0%";
 
             if (result.prediction === 1) {
                 resultDiv.className = "result-box good";
@@ -87,7 +66,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // -- RESET LOGIC --
     document.getElementById('resetBtn').addEventListener('click', function() {
-        renderEarthBaseline();
+        document.getElementById('predictForm').reset();
+        document.getElementById('result').classList.add('hidden');
+        dashboardGrid.classList.add('hidden');
+        Plotly.purge('gaugeChart');
+        Plotly.purge('thresholdChart');
+        Plotly.purge('radarChart');
+        Plotly.purge('featureChart');
+
         const btn = document.getElementById('predictBtn');
         btn.textContent = "Analyze Planet";
         btn.disabled = false;
@@ -295,7 +281,4 @@ document.addEventListener('DOMContentLoaded', () => {
 
         dashboardGrid.classList.remove('hidden');
     }
-
-    // Initialize dashboard with Earth baseline so charts are never empty on load
-    renderEarthBaseline();
 });
