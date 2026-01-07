@@ -1,0 +1,168 @@
+body {
+    background-color: #0b0f19;
+    color: white;
+    font-family: 'Segoe UI', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+}
+
+.container { width: 100%; max-width: 1100px; padding: 20px; }
+
+.card {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 30px;
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+    backdrop-filter: blur(10px);
+}
+
+h1 { margin-top: 0; color: #8ad0ff; }
+p { color: #aaa; margin-bottom: 25px; }
+
+.grid {
+    display: grid;
+    /* repeat(2, 1fr) forces exactly 2 columns of equal width */
+    grid-template-columns: repeat(3, 1fr); 
+    gap: 25px;
+    margin: 25px;
+}
+
+
+.input-group { text-align: left;
+margin-top: 10px; }
+
+label { display: block; font-size: 19px; color: #ccc; margin-bottom: 5px; }
+.unit { font-size: 15px; color: #666; margin-left: 5px; }
+
+input {
+    width: 100%;
+    padding: 15px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 3px solid rgba(255, 255, 255, 0.15);
+    color: white;
+    border-radius: 6px;
+    box-sizing: border-box;
+    transition: border 0.3s;
+    gap: 5px;
+    font-size: 16px;    
+}
+
+input:focus { border-color: #4b8eff; outline: none; }
+
+/* -- NEW BUTTON STYLES -- */
+.button-container {
+    display: flex;
+    gap: 20px; /* Space between buttons */
+}
+
+button {
+    padding: 15px;
+    border-radius: 8px;
+    font-size: 22px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s;
+    border: none;
+}
+
+/* Primary "Predict" Button */
+#predictBtn {
+    flex: 2; /* Takes up 2/3 of space */
+    background: linear-gradient(135deg, #4b8eff, #2a75ff);
+    color: white;
+}
+#predictBtn:hover { transform: scale(1.02); }
+
+/* Secondary "Reset" Button */
+.secondary-btn {
+    flex: 1; /* Takes up 1/3 of space */
+    background: rgba(255, 255, 255, 0.1);
+    color: #ccc;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.secondary-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+/* Result Box */
+.hidden { display: none; }
+
+.result-box {
+    margin-top: 25px;
+    padding: 20px;
+    border-radius: 10px;
+    animation: fadeIn 0.5s ease;
+}
+
+.result-box.good { background: rgba(75, 255, 100, 0.1); border: 1px solid #4bff64; }
+.result-box.bad { background: rgba(255, 80, 80, 0.1); border: 1px solid #ff5050; }
+
+/* -- DASHBOARD STYLES -- */
+.dashboard-container {
+    margin-top: 30px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+.chart {
+    flex: 1;
+    min-width: 300px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 12px;
+    padding: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+@media (max-width: 600px) {
+    .chart {
+        min-width: 100%;
+    }
+}
+
+.meter-container {
+    width: 100%; height: 10px; background: rgba(0,0,0,0.4);
+    border-radius: 5px; margin: 10px 0; overflow: hidden;
+}
+
+.meter-fill { height: 100%; width: 0%; transition: width 1s ease-out; }
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Dashboard Section */
+.dashboard-grid {
+    margin-top: 25px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: repeat(2, minmax(320px, auto));
+    gap: 15px;
+}
+
+.chart-box {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+    padding: 12px;
+    min-height: 320px;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.38);
+    backdrop-filter: blur(6px);
+}
+
+@media (max-width: 768px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (min-width: 992px) {
+    .container { max-width: 1100px; }
+}

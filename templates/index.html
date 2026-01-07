@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ExoHabitAl</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <!-- Plotly.js CDN -->
+  <script src="https://cdn.plot.ly/plotly-2.27.0.min.js" charset="utf-8"></script>
+</head>
+<body>
+
+  <div class="container">
+    <div class="card">
+      <h1>🪐 ExoHabitAl</h1>
+      <p>Enter exoplanet parameters to predict habitability.</p>
+      
+      <form id="predictForm">
+        <div class="grid">
+          
+          <div class="input-group">
+            <label>Planet Radius <span class="unit">(Earth Radii)</span></label>
+            <input type="number" step="any" id="P_RADIUS" placeholder="e.g. 1.5" required>
+          </div>
+
+          <div class="input-group">
+            <label>Planet Mass <span class="unit">(Earth Masses)</span></label>
+            <input type="number" step="any" id="P_MASS" placeholder="e.g. 2.0" required>
+          </div>
+
+          <div class="input-group">
+            <label>Gravity <span class="unit">(Earth g)</span></label>
+            <input type="number" step="any" id="P_GRAVITY" placeholder="e.g. 1.1" required>
+          </div>
+
+          <div class="input-group">
+            <label>Orbital Period <span class="unit">(Days)</span></label>
+            <input type="number" step="any" id="P_PERIOD" placeholder="e.g. 365.2" required>
+          </div>
+
+          <div class="input-group">
+            <label>Equilibrium Temp <span class="unit">(Kelvin)</span></label>
+            <input type="number" step="any" id="P_TEMP_EQUIL" placeholder="e.g. 288" required>
+          </div>
+
+          <div class="input-group">
+            <label>Star Mass <span class="unit">(Solar Mass)</span></label>
+            <input type="number" step="any" id="S_MASS" placeholder="e.g. 1.0" required>
+          </div>
+
+          <div class="input-group">
+            <label>Star Radius <span class="unit">(Solar Radii)</span></label>
+            <input type="number" step="any" id="S_RADIUS" placeholder="e.g. 1.0" required>
+          </div>
+
+          <div class="input-group">
+            <label>Star Temp <span class="unit">(Kelvin)</span></label>
+            <input type="number" step="any" id="S_TEMPERATURE" placeholder="e.g. 5778" required>
+          </div>
+
+          <div class="input-group">
+            <label>Star Luminosity <span class="unit">(Solar Lum.)</span></label>
+            <input type="number" step="any" id="S_LUMINOSITY" placeholder="e.g. 1.0" required>
+          </div>
+
+        </div>
+      </br>
+        <div class="button-container">
+            <button type="submit" id="predictBtn">Analyze Planet</button>
+            <button type="button" id="resetBtn" class="secondary-btn">Reset</button>
+        </div>
+         </br>
+      </form>
+
+      <div id="result" class="hidden">
+        <h2 id="resultTitle"></h2>
+        <div class="meter-container">
+            <div id="probMeter" class="meter-fill"></div>
+        </div>
+        <p id="resultProb"></p>
+      </div>
+
+      <section class="dashboard-grid hidden" id="dashboardGrid">
+        <div id="gaugeChart" class="chart-box"></div>
+        <div id="thresholdChart" class="chart-box"></div>
+        <div id="radarChart" class="chart-box"></div>
+        <div id="featureChart" class="chart-box"></div>
+      </section>
+
+
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
