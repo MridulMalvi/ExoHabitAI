@@ -1,0 +1,11 @@
+# Virtual Environment (Very Important!)
+myenv/
+
+# VS Code settings
+.vscode/
+
+# Python compiled files (junk files)
+__pycache__/
+*.pyc 
+*.mp4
+
