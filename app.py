@@ -7,9 +7,6 @@ import imblearn  # REQUIRED for model loading
 
 app = Flask(__name__)
 
-# Production configuration
-app.config['ENV'] = os.environ.get('FLASK_ENV', 'production')
-app.config['DEBUG'] = False
 
 
 def _patch_simple_imputer_fill_dtype(pipeline):
