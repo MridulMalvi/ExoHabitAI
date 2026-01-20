@@ -86,5 +86,4 @@ def predict():
 
 
 # Vercel requires the app to be exposed
-# This is the WSGI application entry point
 app = app
