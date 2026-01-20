@@ -1,16 +1,24 @@
 import os
 import sys
 
-# Add parent directory to path so we can import from root
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+# Get the directory where index.py is located (the api folder)
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+# The root directory is one level up from the api folder
+ROOT_DIR = os.path.dirname(CURRENT_DIR)
+
+# Add root directory to path so we can import modules if needed
+if ROOT_DIR not in sys.path:
+    sys.path.insert(0, ROOT_DIR)
 
 import joblib
 import pandas as pd
 from flask import Flask, render_template, request, jsonify
-import imblearn  # REQUIRED for model loading
 
-# Get the root directory path
-ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+try:
+    import imblearn  # REQUIRED for model loading
+except ImportError:
+    # This might happen if requirements installation failed silently
+    imblearn = None
 
 app = Flask(__name__, 
             template_folder=os.path.join(ROOT_DIR, 'templates'),
@@ -18,27 +26,29 @@ app = Flask(__name__,
 
 
 def _patch_simple_imputer_fill_dtype(pipeline):
-    """Work around scikit-learn 1.6 to 1.8 pickle breakage.
-
-    The saved model was trained with scikit-learn 1.6.1 and the current
-    environment has 1.8.0. When the `SimpleImputer` step is unpickled under
-    1.8.0 it is missing the private `_fill_dtype` attribute, which causes an
-    AttributeError during `transform`. We set it to the recorded `_fit_dtype`
-    if needed so predictions keep working.
-    """
+    """Work around scikit-learn pickle breakage."""
     try:
         steps = getattr(pipeline, "named_steps", {})
         imputer = steps.get("simpleimputer") if isinstance(steps, dict) else None
         if imputer and not hasattr(imputer, "_fill_dtype") and hasattr(imputer, "_fit_dtype"):
             imputer._fill_dtype = imputer._fit_dtype  # type: ignore[attr-defined]
-    except Exception as exc:  # pragma: no cover — defensive logging only
+    except Exception as exc:
         app.logger.warning("Imputer patch skipped: %s", exc)
 
 
-# Load model once at startup and apply compatibility patch
+# Load model at startup
 model_path = os.path.join(ROOT_DIR, "exo_model.pkl")
-model = joblib.load(model_path)
-_patch_simple_imputer_fill_dtype(model)
+
+# Error handling for model loading to help debug Vercel logs
+model = None
+try:
+    if os.path.exists(model_path):
+        model = joblib.load(model_path)
+        _patch_simple_imputer_fill_dtype(model)
+    else:
+        print(f"Error: Model file not found at {model_path}")
+except Exception as e:
+    print(f"Error loading model: {e}")
 
 
 @app.route("/")
@@ -48,6 +58,9 @@ def home():
 
 @app.route("/predict", methods=["POST"])
 def predict():
+    if model is None:
+        return jsonify({"error": "Model not loaded"}), 500
+        
     data = request.get_json()
 
     # Feature order MUST match training
