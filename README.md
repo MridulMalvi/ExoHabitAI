@@ -17,7 +17,7 @@
 * **Backend:** Python 3.x, Flask, Gunicorn
 * **Machine Learning:** Scikit-learn, Pandas, NumPy, Imbalanced-learn, Joblib
 * **Frontend:** HTML5, CSS3, JavaScript, Plotly.js
-* **Deployment:** Ready for Render/Heroku (includes `Procfile`)
+* **Deployment:** Render 
 
 ## 📋 Input Parameters
 To generate a prediction, the model requires the following 9 attributes:
@@ -74,7 +74,7 @@ ExoHabitAI/
 │   └── bg.png             # Background image
 └── templates/
     └── index.html         # Frontend HTML
-
+```
 
 ## ☁️ Deployment
 This project is deployed on render .
