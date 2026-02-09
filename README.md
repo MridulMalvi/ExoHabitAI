@@ -58,7 +58,6 @@ To generate a prediction, the model requires the following 9 attributes:
     ```bash
     python app.py
     ```
-    The app will start at `http://localhost:5000`.
 
 
 ## 📂 Project Structure
